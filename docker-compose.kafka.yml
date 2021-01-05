@@ -5,6 +5,7 @@
 #cd detector
 #docker build -t detector .
 #https://florimond.dev/blog/articles/2018/09/building-a-streaming-fraud-detection-system-with-kafka-and-python/
+#Kafdrop: https://github.com/obsidiandynamics/kafdrop
 version: '3'
 
 services:
