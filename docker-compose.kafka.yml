@@ -1,3 +1,10 @@
+#docker network create -d overlay --attachable kafka-network
+#docker stack deploy -c docker-compose.kafka.yml kafka
+#cd generator
+#docker build -t generator .
+#cd detector
+#docker build -t detector .
+#https://florimond.dev/blog/articles/2018/09/building-a-streaming-fraud-detection-system-with-kafka-and-python/
 version: '3'
 
 services:
@@ -7,6 +14,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      kafka-network:
 
   kafka1:
     image: confluentinc/cp-kafka:latest
@@ -16,10 +25,15 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka1:9091
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_BROKER_ID: 1
+    networks:
+      kafka-network:
       
-   kafka2:
+  kafka2:
     image: confluentinc/cp-kafka:latest
     hostname: kafka2
     depends_on:
@@ -27,10 +41,15 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka2:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-   
-   kafka3:
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_BROKER_ID: 2
+    networks:
+      kafka-network:
+  
+  kafka3:
     image: confluentinc/cp-kafka:latest
     hostname: kafka3
     depends_on:
@@ -38,25 +57,32 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka3:9093
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-   
-   
-   
-   kafdrop:
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_BROKER_ID: 3
+    networks:
+      kafka-network:
+  
+  
+  kafdrop:
     image: obsidiandynamics/kafdrop
     restart: "no"
     ports:
       - "9000:9000"
     environment:
-      KAFKA_BROKERCONNECT: "kafka1:9092"
+      KAFKA_BROKERCONNECT: "kafka1:9091"
     depends_on:
       - kafka1
       - kafka2
       - kafka3
-
+    networks:
+      kafka-network:
+  
 
 networks:
-  default:
+  kafka-network:
+    driver: overlay
     external:
-      name: kafka-network
+      name:  kafka-network
