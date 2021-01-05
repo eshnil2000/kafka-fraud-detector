@@ -1,5 +1,17 @@
 # Kafka Fraud Detector
 
+## Summary steps:
+```
+#docker network create -d overlay --attachable kafka-network
+#docker stack deploy -c docker-compose.kafka.yml kafka
+#cd generator
+#docker build -t generator .
+#cd detector
+#docker build -t detector .
+#https://florimond.dev/blog/articles/2018/09/building-a-streaming-fraud-detection-system-with-kafka-and-python/
+#Kafdrop: https://github.com/obsidiandynamics/kafdrop
+```
+
 [![Kafka](https://img.shields.io/badge/streaming_platform-kafka-black.svg?style=flat-square)](https://kafka.apache.org)
 [![Docker Images](https://img.shields.io/badge/docker_images-confluent-orange.svg?style=flat-square)](https://github.com/confluentinc/cp-docker-images)
 [![Python](https://img.shields.io/badge/python-3.5+-blue.svg?style=flat-square)](https://www.python.org)
