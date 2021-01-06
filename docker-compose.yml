@@ -6,26 +6,36 @@ services:
     #build: ./generator
     image: generator
     environment:
-      KAFKA_BROKER_URL: kafka1:9091
+      KAFKA_BROKER_URL1: kafka1:9091
+      KAFKA_BROKER_URL2: kafka2:9092
+      KAFKA_BROKER_URL3: kafka3:9093
       TRANSACTIONS_TOPIC: queueing.transactions
-      TRANSACTIONS_PER_SECOND: 10
+      TRANSACTIONS_PER_SECOND: 5
+      ORDER_BOOK_URL: http://crypto:5000/order/new
+    depends_on:
+      - crypto
     networks:
-      kafka-network:    
+      docker-browser2_default:    
 
 
   detector:
     #build: ./detector
     image: detector
     environment:
-      KAFKA_BROKER_URL: kafka1:9091
+      KAFKA_BROKER_URL1: kafka1:9091
+      KAFKA_BROKER_URL2: kafka2:9092
+      KAFKA_BROKER_URL3: kafka3:9093
       TRANSACTIONS_TOPIC: queueing.transactions
       LEGIT_TOPIC: streaming.transactions.legit
       FRAUD_TOPIC: streaming.transactions.fraud
+      ORDER_BOOK_URL: http://crypto:5000/order/new
+    depends_on:
+      - crypto
     networks:
-      kafka-network:
+      docker-browser2_default:
 
 networks:
-  kafka-network:
+  docker-browser2_default:
     driver: overlay
     external:
-      name:  kafka-network
+      name:  docker-browser2_default
