@@ -13,16 +13,16 @@ KAFKA_BROKER_URL2 = os.environ.get('KAFKA_BROKER_URL2')
 KAFKA_BROKER_URL3 = os.environ.get('KAFKA_BROKER_URL3')
 bootstrap_servers = [KAFKA_BROKER_URL1,KAFKA_BROKER_URL2,KAFKA_BROKER_URL3]
 TRANSACTIONS_TOPIC = os.environ.get('TRANSACTIONS_TOPIC')
-LEGIT_TOPIC = os.environ.get('LEGIT_TOPIC')
-FRAUD_TOPIC = os.environ.get('FRAUD_TOPIC')
+OTHER_TOPIC = os.environ.get('OTHER_TOPIC')
+BTC_TOPIC = os.environ.get('BTC_TOPIC')
 
 
 def _random_amount() -> float:
     """Return a random amount between 10.00 and 100.00."""
     return int(randint(1000, 10000) / 100)
 
-def is_suspicious(transaction: dict) -> bool:
-    """Determine whether a transaction is suspicious."""
+def is_btc(transaction: dict) -> bool:
+    """Determine whether a transaction is btc."""
     print(transaction)
     #side = choice(["buy", "sell"])
     #quantity= str(_random_amount())
@@ -36,7 +36,8 @@ def is_suspicious(transaction: dict) -> bool:
     #url= 'http://crypto:5000/order/new'
     url=  os.environ.get('ORDER_BOOK_URL')
     print(data)
-    x = requests.post(url, data = data, headers=headers)
+    if transaction['pair']=='BTC/USD':
+        x = requests.post(url, data = data, headers=headers)
     return transaction['pair']=='BTC/USD'
     #return int(transaction['price']) >= 50
     #return transaction['amount'] >= 900
@@ -54,6 +55,6 @@ if __name__ == '__main__':
     )
     for message in consumer:
         transaction: dict = message.value
-        topic = FRAUD_TOPIC if is_suspicious(transaction) else LEGIT_TOPIC
+        topic = BTC_TOPIC if is_btc(transaction) else OTHER_TOPIC
         producer.send(topic, value=transaction)
         print(topic, transaction)  # DEBUG

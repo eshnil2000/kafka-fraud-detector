@@ -26,8 +26,8 @@ services:
       KAFKA_BROKER_URL2: kafka2:9092
       KAFKA_BROKER_URL3: kafka3:9093
       TRANSACTIONS_TOPIC: queueing.transactions
-      LEGIT_TOPIC: streaming.transactions.legit
-      FRAUD_TOPIC: streaming.transactions.fraud
+      OTHER_TOPIC: streaming.transactions.other
+      BTC_TOPIC: streaming.transactions.btcusd
       ORDER_BOOK_URL: http://crypto:5000/order/new
     depends_on:
       - crypto
