@@ -1,4 +1,4 @@
-#docker network create -d overlay --attachable kafka-network
+#docker network create -d overlay --attachable traefik_default
 #docker stack deploy -c docker-compose.kafka.yml kafka
 #cd generator
 #docker build -t generator .
@@ -18,7 +18,7 @@ services:
     labels:
       - traefik.http.routers.zookeeper.rule=Host(`zookeeper`)
     networks:
-      docker-browser2_default:
+      traefik_default:
 
   kafka1:
     image: confluentinc/cp-kafka:latest
@@ -36,7 +36,7 @@ services:
     labels:
       - traefik.http.routers.kafka1.rule=Host(`kafka1`)
     networks:
-      docker-browser2_default:
+      traefik_default:
       
   kafka2:
     image: confluentinc/cp-kafka:latest
@@ -54,7 +54,7 @@ services:
     labels:
       - traefik.http.routers.kafka2.rule=Host(`kafka2`)
     networks:
-      docker-browser2_default:
+      traefik_default:
   
   kafka3:
     image: confluentinc/cp-kafka:latest
@@ -72,7 +72,7 @@ services:
     labels:
       - traefik.http.routers.kafka3.rule=Host(`kafka3`)
     networks:
-      docker-browser2_default:
+      traefik_default:
   
   
   kafdrop:
@@ -91,13 +91,13 @@ services:
       - traefik.http.routers.kafdrop.rule=Host(`kafdrop.localhost`)
       - traefik.http.routers.kafdrop.service=kafdrop
       - traefik.http.services.kafdrop.loadbalancer.server.port=9000
-      - traefik.docker.network=docker-browser2_default
+      - traefik.docker.network=traefik_default
     networks:
-      docker-browser2_default:
+      traefik_default:
   
 
 networks:
-  docker-browser2_default:
+  traefik_default:
     driver: overlay
     external:
-      name:  docker-browser2_default
+      name:  traefik_default

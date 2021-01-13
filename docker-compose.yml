@@ -15,7 +15,7 @@ services:
     depends_on:
       - crypto
     networks:
-      docker-browser2_default:    
+      traefik_default:    
 
 
   detector:
@@ -32,10 +32,10 @@ services:
     depends_on:
       - crypto
     networks:
-      docker-browser2_default:
+      traefik_default:
 
 networks:
-  docker-browser2_default:
+  traefik_default:
     driver: overlay
     external:
-      name:  docker-browser2_default
+      name:  traefik_default
