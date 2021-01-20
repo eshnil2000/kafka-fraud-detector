@@ -1,4 +1,4 @@
-"""Produce fake transactions into a Kafka topic."""
+"""Produce transactions into a Kafka topic."""
 
 import os
 from time import sleep

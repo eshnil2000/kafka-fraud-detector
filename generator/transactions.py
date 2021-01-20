@@ -1,4 +1,4 @@
-"""Utilities to model money transactions."""
+"""transaction generator."""
 
 from random import choices, randint,choice
 from string import ascii_letters, digits

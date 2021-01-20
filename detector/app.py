@@ -7,6 +7,7 @@ import json
 import os
 from kafka import KafkaConsumer, KafkaProducer
 
+
 #KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
 KAFKA_BROKER_URL1 = os.environ.get('KAFKA_BROKER_URL1')
 KAFKA_BROKER_URL2 = os.environ.get('KAFKA_BROKER_URL2')
