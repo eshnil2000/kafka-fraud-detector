@@ -4,7 +4,7 @@ services:
 
   generator:
     #build: ./generator
-    image: generator
+    image: eshnil2000/generator
     environment:
       KAFKA_BROKER_URL1: kafka1:9091
       KAFKA_BROKER_URL2: kafka2:9092
@@ -20,7 +20,7 @@ services:
 
   detector:
     #build: ./detector
-    image: detector
+    image: eshnil2000/detector
     environment:
       KAFKA_BROKER_URL1: kafka1:9091
       KAFKA_BROKER_URL2: kafka2:9092
